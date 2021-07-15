@@ -27,7 +27,7 @@ class App extends Component {
     ],
     searchText: ""
   };
-
+  
   render() {
     return (
       <div>
