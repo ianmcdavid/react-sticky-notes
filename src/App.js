@@ -25,11 +25,27 @@ class App extends Component {
     const newNoteArray = [newNote, ...this.state.notes];
     this.setState({ notes: newNoteArray });
   };
+  onType = (text, noteId, field) => {
+    const updatedNotes = this.state.notes.map((note) => {
+      if (note.id === noteId) {
+        if (field === "title") {
+          note.title = text;
+          return note;
+        } else if (field === "description") {
+          note.description = text;
+          return note;
+        }
+      } else {
+        return note;
+      }
+    });
+    this.setState({ notes: updatedNotes });
+  };
   render() {
     return (
       <div>
         <Header searchText={this.state.searchText} addNote={this.addNote} />
-        <NotesList notes={this.state.notes} />
+        <NotesList onType={this.onType} notes={this.state.notes} />
       </div>
     );
   }
