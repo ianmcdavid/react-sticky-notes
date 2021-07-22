@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
 import Header from "./Header.js";
 import NotesList from "./NotesList.js";
 
@@ -38,6 +37,7 @@ class App extends Component {
       } else {
         return note;
       }
+      return note;
     });
     this.setState({ notes: updatedNotes });
   };
@@ -64,6 +64,23 @@ class App extends Component {
     });
     this.setState({ notes: noteSearch, searchText: searchText });
   };
+  deleteNote = (noteId) => {
+    const notId = (note) => note.id !== noteId;
+    const notesArray = this.state.notes.filter(notId);
+    this.setState({ notes: notesArray });
+  };
+  componentDidMount() {
+    const stateString = localStorage.getItem("stateString");
+    if (stateString) {
+      const savedState = JSON.parse(stateString);
+      this.setState(savedState);
+    }
+  }
+  componentDidUpdate() {
+    const stateString = JSON.stringify(this.state);
+    localStorage.setItem("stateString", stateString);
+  }
+
   render() {
     return (
       <div>
@@ -72,7 +89,11 @@ class App extends Component {
           addNote={this.addNote}
           onSearch={this.onSearch}
         />
-        <NotesList onType={this.onType} notes={this.state.notes} />
+        <NotesList
+          onType={this.onType}
+          notes={this.state.notes}
+          deleteNote={this.deleteNote}
+        />
       </div>
     );
   }
